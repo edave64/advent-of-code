@@ -1,0 +1,28 @@
+{
+	"name": "advent-of-code",
+	"version": "1.0.0",
+	"type": "module",
+	"scripts": {
+		"2024-01-01": "tsx 2024/01/part01/solution.ts",
+		"2024-01-02": "tsx 2024/01/part02/solution.ts"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/edave64/advent-of-code.git"
+	},
+	"author": "edave64",
+	"license": "UNLICENSE",
+	"homepage": "https://github.com/edave64/advent-of-code#readme",
+	"description": "",
+	"dependencies": {
+		"prettier": "^3.4.1",
+		"tsx": "^4.19.2"
+	},
+	"devDependencies": {
+		"@types/node": "^22.10.1"
+	},
+	"prettier": {
+		"printWidth": 120,
+		"useTabs": true
+	}
+}
