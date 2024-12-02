@@ -3,8 +3,10 @@
 	"version": "1.0.0",
 	"type": "module",
 	"scripts": {
-		"01-01": "tsx 2024/01/part01/solution.ts",
-		"01-02": "tsx 2024/01/part02/solution.ts"
+		"01-01": "tsx 01/part01/solution.ts",
+		"01-02": "tsx 01/part02/solution.ts",
+		"02-01": "tsx 02/part01/solution.ts",
+		"02-02": "tsx 02/part02/solution.ts"
 	},
 	"repository": {
 		"type": "git",
