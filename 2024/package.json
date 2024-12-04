@@ -8,7 +8,9 @@
 		"02-01": "tsx 02/part01/solution.ts",
 		"02-02": "tsx 02/part02/solution.ts",
 		"03-01": "tsx 03/part01/solution.ts",
-		"03-02": "tsx 03/part02/solution.ts"
+		"03-02": "tsx 03/part02/solution.ts",
+		"04-01": "tsx 04/part01/solution.ts",
+		"04-02": "tsx 04/part02/solution.ts"
 	},
 	"repository": {
 		"type": "git",
