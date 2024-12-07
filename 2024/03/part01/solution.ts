@@ -1,15 +1,6 @@
-import { promises as fs } from "fs";
+import { openFile } from "../../shared";
 
-let file: fs.FileHandle;
-try {
-	file = await fs.open(import.meta.dirname + "/../input.txt", "r");
-} catch (e) {
-	console.error("No input file found");
-	console.error(e);
-	process.exit(1);
-}
-
-const fulltext = await file.readFile({ encoding: "utf8" });
+const fulltext = await (await openFile(import.meta.dirname + "/../input.txt")).readFile({ encoding: "utf8" });
 
 let sum = 0;
 

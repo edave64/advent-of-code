@@ -1,4 +1,4 @@
-import { promises as fs } from "fs";
+import { readFileLines } from "../shared";
 
 export type DependencyMap = Map<number, Set<number>>;
 
@@ -11,17 +11,8 @@ export async function loadData(path: string): Promise<{ dependencies: Dependency
 	const dependencies: DependencyMap = new Map();
 	const pageSets: number[][] = [];
 	let state = State.OrderingRules;
-	let file: fs.FileHandle;
 
-	try {
-		file = await fs.open(path, "r");
-	} catch (e) {
-		console.error("No input file found");
-		console.error(e);
-		process.exit(1);
-	}
-
-	for await (const line of file.readLines()) {
+	for await (const line of readFileLines(path)) {
 		if (line === "") {
 			state = State.PageSet;
 		} else if (state === State.OrderingRules) {

@@ -1,18 +1,9 @@
-import { promises as fs } from "fs";
-
-let file: fs.FileHandle;
-try {
-	file = await fs.open(import.meta.dirname + "/../input.txt", "r");
-} catch (e) {
-	console.error("No input file found");
-	console.error(e);
-	process.exit(1);
-}
+import { readFileLines } from "../../shared";
 
 const grid: string[][] = [];
 let count = 0;
 
-for await (const line of file.readLines()) {
+for await (const line of readFileLines(import.meta.dirname + "/../input.txt")) {
 	grid.push(line.split(""));
 	// I haven't tested it, but I'm just going to assume that counting with a trivial regex is
 	// faster than seeking in the grid

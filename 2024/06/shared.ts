@@ -1,4 +1,4 @@
-import { promises as fs } from "fs";
+import { readFileLines } from "../shared";
 
 export enum MapTile {
 	Empty,
@@ -11,18 +11,9 @@ export enum MapTile {
 
 export class World {
 	public static async load(path: string): Promise<World> {
-		let file: fs.FileHandle;
-		try {
-			file = await fs.open(path, "r");
-		} catch (e) {
-			console.error("No input file found");
-			console.error(e);
-			process.exit(1);
-		}
-
 		const lines: string[] = [];
 
-		for await (const line of file.readLines()) {
+		for await (const line of readFileLines(path)) {
 			lines.push(line);
 		}
 		const width = lines[0].length;
