@@ -2,8 +2,6 @@ import { MapTile, World } from "../shared";
 
 const map = await World.load(import.meta.dirname + "/../input.txt");
 
-debugger;
-
 while (map.step()) {}
 
 // Number of positions
