@@ -32,6 +32,7 @@
 		"tsx": "^4.19.2"
 	},
 	"devDependencies": {
+		"@types/bun": "^1.1.14",
 		"@types/node": "^22.10.1"
 	},
 	"prettier": {
