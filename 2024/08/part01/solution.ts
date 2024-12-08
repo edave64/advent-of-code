@@ -40,27 +40,3 @@ for (const freq of pointsPreFreq.keys()) {
 }
 
 console.log(antinodes.size);
-
-function printDebugMap() {
-	const map = new Array(height).fill(0).map((): string[] => new Array(width).fill("."));
-
-	for (let y = 0; y < height; y++) {
-		for (let x = 0; x < width; x++) {
-			const point = y * width + x;
-			if (antinodes.has(point)) {
-				map[y][x] = "#";
-			}
-		}
-	}
-
-	for (const freq of pointsPreFreq.keys()) {
-		const points = pointsPreFreq.get(freq)!;
-		for (const point of points) {
-			const x = point % width;
-			const y = Math.floor(point / width);
-			map[y][x] = freq;
-		}
-	}
-
-	console.log(map.map((row) => row.join("")).join("\n"));
-}
