@@ -16,7 +16,8 @@
 		"06-01": "tsx 06/part01/solution.ts",
 		"06-02": "tsx 06/part02/solution.ts",
 		"07-01": "tsx 07/part01/solution.ts",
-		"07-02": "tsx 07/part02/solution.ts"
+		"07-02": "tsx 07/part02/solution.ts",
+		"07-02f": "tsx 07/part02/solution-fast.ts"
 	},
 	"repository": {
 		"type": "git",
