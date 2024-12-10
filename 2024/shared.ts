@@ -11,6 +11,24 @@ export async function openFile(path: string): Promise<fs.FileHandle> {
 	}
 }
 
+export async function readWorld(path: string): Promise<{ width: number; height: number; map: Uint8Array }> {
+	const lines = await Array.fromAsync(readFileLines(path));
+	const width = lines[0].length;
+	const height = lines.length;
+	const map = new Uint8Array(height * width);
+
+	for (let y = 0; y < lines.length; y++) {
+		const line = lines[y];
+		const yOffset = y * width;
+		for (let x = 0; x < line.length; x++) {
+			const char = line[x];
+			map[yOffset + x] = +char;
+		}
+	}
+
+	return { width, height, map };
+}
+
 export async function* readFileLines(path: string): AsyncIterableIterator<string> {
 	if (typeof Bun !== "undefined") {
 		const reader = Bun.file(path).stream().pipeThrough(new TextDecoderStream("utf-8")).getReader();

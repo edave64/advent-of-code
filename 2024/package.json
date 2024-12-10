@@ -19,7 +19,11 @@
 		"07-02": "tsx 07/part02/solution.ts",
 		"07-02f": "tsx 07/part02/solution-fast.ts",
 		"08-01": "tsx 08/part01/solution.ts",
-		"08-02": "tsx 08/part02/solution.ts"
+		"08-02": "tsx 08/part02/solution.ts",
+		"09-01": "tsx 09/part01/solution.ts",
+		"09-02": "tsx 09/part02/solution.ts",
+		"10-01": "tsx 10/part01/solution.ts",
+		"10-02": "tsx 10/part02/solution.ts"
 	},
 	"repository": {
 		"type": "git",
