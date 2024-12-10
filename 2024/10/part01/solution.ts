@@ -2,17 +2,19 @@ import { readWorld } from "../../shared";
 
 const { width, map } = await readWorld(import.meta.dirname + "/../input.txt");
 
-let sum = 0;
+export function solve(): number {
+	let sum = 0;
 
-for (let idx = 0; idx < map.length; idx++) {
-	if (map[idx] === 0) {
-		const found = new Set<number>();
-		walk(idx, 1, found);
-		sum += found.size;
+	for (let idx = 0; idx < map.length; idx++) {
+		if (map[idx] === 0) {
+			const found = new Set<number>();
+			walk(idx, 1, found);
+			sum += found.size;
+		}
 	}
-}
 
-console.log(sum);
+	return sum;
+}
 
 // Max depth is 10, so no overflow worries
 function walk(idx: number, dir: number, found: Set<number>) {
@@ -39,4 +41,8 @@ function walk(idx: number, dir: number, found: Set<number>) {
 	if (map[idx + width] === next) {
 		walk(idx + width, dir, found);
 	}
+}
+
+if (import.meta.main) {
+	console.log(solve());
 }

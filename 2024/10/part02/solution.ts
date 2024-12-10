@@ -1,16 +1,19 @@
+import { bench, run } from "mitata";
 import { readWorld } from "../../shared";
 
 const { width, map } = await readWorld(import.meta.dirname + "/../input.txt");
 
-let sum = 0;
+export function solve(): number {
+	let sum = 0;
 
-for (let idx = 0; idx < map.length; idx++) {
-	if (map[idx] === 0) {
-		sum += walk(idx, 1);
+	for (let idx = 0; idx < map.length; idx++) {
+		if (map[idx] === 0) {
+			sum += walk(idx, 1);
+		}
 	}
-}
 
-console.log(sum);
+	return sum;
+}
 
 // Max depth is 10, so no overflow worries
 function walk(idx: number, dir: number): number {
@@ -38,4 +41,8 @@ function walk(idx: number, dir: number): number {
 		rating += walk(idx + width, dir);
 	}
 	return rating;
+}
+
+if (import.meta.main) {
+	console.log(solve());
 }

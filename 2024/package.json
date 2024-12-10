@@ -34,6 +34,7 @@
 	"homepage": "https://github.com/edave64/advent-of-code#readme",
 	"description": "",
 	"dependencies": {
+		"mitata": "^1.0.20",
 		"prettier": "^3.4.1",
 		"tsx": "^4.19.2"
 	},
