@@ -39,18 +39,20 @@ for (let i = 0; ; i++) {
 	// This idea was just build of a hunch that this value would probably be smaller for
 	// maps that contain discernible pictures.
 	let discontinuity = 0;
+	let lastLine: number[] = [];
 	for (const line of map) {
 		for (let x = 1; x < width; x++) {
-			if (line[x] !== line[x - 1]) {
+			if (line[x] !== line[x - 1] && line[x] !== lastLine[x]) {
 				discontinuity++;
 			}
 		}
+		lastLine = line;
 	}
 	// This value was found by trial and error. I found the original tree by testing
 	// for < 800 (The ones without visible patterns are typically ~900), which does find most of
 	// the images with patterns. Then when I found the first tree image, this seemed like a good
 	// value to find more.
-	if (discontinuity > 600) {
+	if (discontinuity > 300) {
 		continue;
 	}
 	console.log(`Iteration ${i} discontinuity: ${discontinuity}`);
