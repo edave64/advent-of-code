@@ -9,7 +9,8 @@ a = a >> 3;
 b = b ^ c;
 b = b ^ 5;
 yield b & 0b111;
-if (a === 0) loop;
+if (a !== 0) continue;
+break;
 
 This tells us:
 - Every iteration shifts the value of a by 3 bits
