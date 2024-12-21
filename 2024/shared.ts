@@ -1,5 +1,7 @@
 import { promises as fs } from "fs";
 
+export const MaxU32bit = Math.pow(2, 32) - 1;
+
 export async function openFile(path: string): Promise<fs.FileHandle> {
 	let file: fs.FileHandle;
 	try {

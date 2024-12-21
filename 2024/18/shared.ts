@@ -1,4 +1,4 @@
-import { readFileLines } from "../shared";
+import { MaxU32bit, readFileLines } from "../shared";
 
 export enum Tile {
 	Obstacle,
@@ -68,18 +68,16 @@ export async function readData(
 	};
 }
 
-const max32bit = Math.pow(2, 32) - 1;
-
 // Adapted from wikipedia: https://en.wikipedia.org/w/index.php?title=A*_search_algorithm&oldid=1259730047
 export function aStar(start: number, goal: number, map: Uint8Array, width: number): number[] | null {
 	let openSet = new Set<number>([start]);
 
 	let cameFrom = new Uint32Array(map.length).fill(0);
-	let stepsToReach = new Uint32Array(map.length).fill(max32bit);
+	let stepsToReach = new Uint32Array(map.length).fill(MaxU32bit);
 	stepsToReach[start] = 0;
 
 	// The score of a node is the number of steps to reach the node plus the distance to the goal
-	let score = new Uint32Array(map.length).fill(max32bit);
+	let score = new Uint32Array(map.length).fill(MaxU32bit);
 	score[start] = distance(start, goal, width);
 
 	while (openSet.size > 0) {
