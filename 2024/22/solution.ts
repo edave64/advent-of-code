@@ -15,17 +15,17 @@ for await (const input of readFileLines(import.meta.dirname + "/input.txt")) {
 	// values, we store the sequence as a 16-bit number. (4 bits per price difference)
 	// TODO: After writing this, I realized that price differences can be negative, so that should
 	// throw the math off a bit. But it got the correct answer anyway.
-	const seqenceMap = new Map<number, number>();
+	const sequenceMap = new Map<number, number>();
 	for (let i = 0; i < 2000; ++i) {
 		currentNumber = processNumber(currentNumber);
 		const currentPrice = currentNumber % 10;
 		currentSequenceCode = ((currentSequenceCode << 4) & 0xffff) + (currentPrice - previousPrice);
-		if (i > 3 && !seqenceMap.has(currentSequenceCode)) {
-			seqenceMap.set(currentSequenceCode, currentPrice);
+		if (i > 3 && !sequenceMap.has(currentSequenceCode)) {
+			sequenceMap.set(currentSequenceCode, currentPrice);
 		}
 		previousPrice = currentPrice;
 	}
-	for (const [sequenceCode, price] of seqenceMap) {
+	for (const [sequenceCode, price] of sequenceMap) {
 		globalSequenceMap.set(sequenceCode, (globalSequenceMap.get(sequenceCode)! ?? 0) + price);
 	}
 	sum += currentNumber;
