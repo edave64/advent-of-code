@@ -1,6 +1,3 @@
-import { readFileLines } from "../shared";
-import { playSequence } from "./player";
-
 class NumPadBot {
 	static ButtonPos: Record<NumButton, [number, number]> = {
 		A: [2, 3],
@@ -76,7 +73,7 @@ class NumPadBot {
 }
 
 const numPadBot = new NumPadBot();
-const input = "379A";
+const input = "029A";
 
 function numpadWalk(str: string, i: number, prefix: string, numPadBot: NumPadBot, results: string[]): void {
 	if (str.length <= i) {
@@ -100,7 +97,7 @@ const ArrowForbiddenY = 0;
 const arrowPadSnippets: Record<Step, Record<Step, string[]>> = {
 	A: {
 		A: ["A"],
-		"^": ["<A"],
+		"^": [">A"],
 		"<": ["v<<A"],
 		">": ["vA"],
 		v: ["v<A", "<vA"],
@@ -134,23 +131,29 @@ const arrowPadSnippets: Record<Step, Record<Step, string[]>> = {
 		v: ["A"],
 	},
 };
-let sum = 0;
-for await (const input of readFileLines(import.meta.dirname + "/input.txt")) {
-	console.log(input);
-	const numPadBot = new NumPadBot();
-	const numpadSequences: string[] = [];
-	numpadWalk(input, 0, "", numPadBot, numpadSequences);
-	const bot1 = numpadSequences.flatMap((x) => arrowPadWalk(x));
-	const length1 = new Map<number, number>();
-	for (const str of bot1) {
-		length1.set(str.length, (length1.get(str.length) ?? 0) + 1);
-	}
-	const bot2 = bot1.flatMap((x) => arrowPadWalk(x));
-	const lengths = new Map<number, number>();
-	const minLength = bot2.reduce((a, b) => Math.min(a, b.length), Number.MAX_SAFE_INTEGER);
-	sum += minLength * parseInt(input.replace(/\D/g, ""));
+
+const numpadSequences: string[] = [];
+numpadWalk(input, 0, "", numPadBot, numpadSequences);
+console.log(numpadSequences);
+const bot1 = numpadSequences.flatMap((x) => arrowPadWalk(x));
+const length1 = new Map<number, number>();
+for (const str of bot1) {
+	length1.set(str.length, (length1.get(str.length) ?? 0) + 1);
 }
-console.log(sum);
+console.log(length1);
+const bot2 = bot1.flatMap((x) => arrowPadWalk(x));
+const lengths = new Map<number, number>();
+for (const str of bot2) {
+	lengths.set(str.length, (lengths.get(str.length) ?? 0) + 1);
+}
+console.log(lengths);
+/*
+const bot3 = bot2.flatMap((x) => arrowPadWalk(x));
+const length3 = new Map<number, number>();
+for (const str of bot3) {
+	length3.set(str.length, (length3.get(str.length) ?? 0) + 1);
+}
+console.log(length3);*/
 
 function arrowPadWalk(str: string): string[] {
 	let ret: string[] = [""];

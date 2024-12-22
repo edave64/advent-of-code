@@ -1,5 +1,4 @@
 import { readFileLines } from "../shared";
-import { playSequence } from "./player";
 
 class NumPadBot {
 	static ButtonPos: Record<NumButton, [number, number]> = {
@@ -97,67 +96,66 @@ const ArrowPadButtonPos: Record<Step, [number, number]> = {
 const ArrowForbiddenX = 0;
 const ArrowForbiddenY = 0;
 // Maps every source pad button and target pad button to the corresponding series of button presses
-const arrowPadSnippets: Record<Step, Record<Step, string[]>> = {
+const arrowPadSnippets: Record<Step, Record<Step, string>> = {
 	A: {
-		A: ["A"],
-		"^": ["<A"],
-		"<": ["v<<A"],
-		">": ["vA"],
-		v: ["v<A", "<vA"],
+		A: "A",
+		"^": "<A",
+		"<": "v<<A",
+		">": "vA",
+		v: "<vA",
 	},
 	"^": {
-		A: [">A"],
-		"^": ["A"],
-		"<": ["v<A"],
-		">": [">vA", "v>A"],
-		v: ["vA"],
+		A: ">A",
+		"^": "A",
+		"<": "v<A",
+		">": "v>A",
+		v: "vA",
 	},
 	"<": {
-		A: [">>^A"],
-		"^": [">^A"],
-		"<": ["A"],
-		">": [">>A"],
-		v: [">A"],
+		A: ">>^A",
+		"^": ">^A",
+		"<": "A",
+		">": ">>A",
+		v: ">A",
 	},
 	">": {
-		A: ["^A"],
-		"^": ["^<A", "<^A"],
-		"<": ["<<A"],
-		">": ["A"],
-		v: ["<A"],
+		A: "^A",
+		"^": "<^A",
+		"<": "<<A",
+		">": "A",
+		v: "<A",
 	},
 	v: {
-		A: ["^>A", ">^A"],
-		"^": ["^A"],
-		"<": ["<A"],
-		">": [">A"],
-		v: ["A"],
+		A: ">^A",
+		"^": "^A",
+		"<": "<A",
+		">": ">A",
+		v: "A",
 	},
 };
-let sum = 0;
+let sum = 0n;
 for await (const input of readFileLines(import.meta.dirname + "/input.txt")) {
 	console.log(input);
 	const numPadBot = new NumPadBot();
 	const numpadSequences: string[] = [];
 	numpadWalk(input, 0, "", numPadBot, numpadSequences);
-	const bot1 = numpadSequences.flatMap((x) => arrowPadWalk(x));
-	const length1 = new Map<number, number>();
-	for (const str of bot1) {
-		length1.set(str.length, (length1.get(str.length) ?? 0) + 1);
+
+	let currentSequences = numpadSequences;
+	for (let i = 0; i < 20; ++i) {
+		console.log(currentSequences[0].length);
+		currentSequences = currentSequences.map((x) => arrowPadWalk(x));
 	}
-	const bot2 = bot1.flatMap((x) => arrowPadWalk(x));
-	const lengths = new Map<number, number>();
-	const minLength = bot2.reduce((a, b) => Math.min(a, b.length), Number.MAX_SAFE_INTEGER);
-	sum += minLength * parseInt(input.replace(/\D/g, ""));
+	const minLength = currentSequences.reduce((a, b) => Math.min(a, b.length), Number.MAX_SAFE_INTEGER);
+	sum += BigInt(minLength * parseInt(input.replace(/\D/g, "")));
 }
 console.log(sum);
 
-function arrowPadWalk(str: string): string[] {
-	let ret: string[] = [""];
+function arrowPadWalk(str: string): string {
+	let ret = "";
 	let lastBtn: Step = "A";
 	for (let i = 0; i < str.length; ++i) {
 		const currentBtn = str[i] as Step;
-		ret = arrowPadSnippets[lastBtn][currentBtn].flatMap((suffix) => ret.map((x) => x + suffix));
+		ret = ret + arrowPadSnippets[lastBtn][currentBtn];
 		lastBtn = currentBtn;
 	}
 	return ret;
