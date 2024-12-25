@@ -81,3 +81,20 @@ function horizontalLine(from: number, to: number): string {
 function verticalLine(from: number, to: number): string {
 	return (to > from ? "v" : "^").repeat(Math.abs(to - from));
 }
+
+export function numpadWalk(str: string): string[] {
+	const numPadBot = new NumPadBot();
+	const numpadSequences: string[] = [];
+	numpadWalkRec(str, 0, "", numPadBot, numpadSequences);
+	return numpadSequences;
+}
+
+function numpadWalkRec(str: string, i: number, prefix: string, numPadBot: NumPadBot, results: string[]): void {
+	if (str.length <= i) {
+		results.push(prefix);
+		return;
+	}
+	for (const letters of numPadBot.nextStep(str[i] as NumButton)) {
+		numpadWalkRec(str, i + 1, prefix + letters, numPadBot.clone(), results);
+	}
+}
