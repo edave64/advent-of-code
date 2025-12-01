@@ -1,0 +1,24 @@
+{
+    "configurations": [
+        {
+            "type": "lldb",
+            "request": "launch",
+            "args": ["1", "b"],
+            "cwd": "${workspaceFolder:2025}",
+            "name": "Debug edave64-aoc-2025",
+            "program": "${workspaceFolder:2025}/.build/debug/edave64-aoc-2025",
+            "preLaunchTask": "swift: Build Debug edave64-aoc-2025",
+            "stdio": ["./sample"]
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "args": ["1", "a"],
+            "cwd": "${workspaceFolder:2025}",
+            "name": "Release edave64-aoc-2025",
+            "program": "${workspaceFolder:2025}/.build/release/edave64-aoc-2025",
+            "preLaunchTask": "swift: Build Release edave64-aoc-2025",
+            "stdio": ["./sample"]
+        }
+    ]
+}
