@@ -14,7 +14,7 @@ struct Aoc2025: ParsableCommand {
   public var benchmark = false
 
   public func run() throws {
-    var solution = getSolution()
+    let solution = getSolution()
 
     // Read all of input until EOF
     var inputString = ""
@@ -34,6 +34,8 @@ struct Aoc2025: ParsableCommand {
     switch day {
     case 1:
       return Solution1()
+    case 2:
+      return Solution2()
     default:
       fatalError("Day \(day) not implemented")
     }
