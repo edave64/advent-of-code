@@ -1,5 +1,5 @@
 {
-  "originHash" : "f8795f34402f36bd0f68508109590843337e77589fccce07c3e0eacf368494cf",
+  "originHash" : "8db9ee17d4d45814f614db0c0a32253934d3802b5470ca625d563725d6280ae4",
   "pins" : [
     {
       "identity" : "swift-argument-parser",
@@ -8,6 +8,15 @@
       "state" : {
         "revision" : "cdd0ef3755280949551dc26dee5de9ddeda89f54",
         "version" : "1.6.2"
+      }
+    },
+    {
+      "identity" : "swift-benchmark",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/google/swift-benchmark",
+      "state" : {
+        "revision" : "8163295f6fe82356b0bcf8e1ab991645de17d096",
+        "version" : "0.1.2"
       }
     }
   ],
