@@ -26,10 +26,10 @@ struct Aoc2025: ParsableCommand {
 
     if benchmark {
       Benchmark.benchmark("Test A") {
-        try solution.partA(input: inputString)
+        let _ = try solution.partA(input: inputString)
       }
       Benchmark.benchmark("Test B") {
-        try solution.partB(input: inputString)
+        let _ = try solution.partB(input: inputString)
       }
       Benchmark.main(settings: [TimeUnit(.ms)])
       return
@@ -54,6 +54,8 @@ struct Aoc2025: ParsableCommand {
       return Solution4()
     case 5:
       return Solution5()
+    case 6:
+      return Solution6()
     default:
       fatalError("Day \(day) not implemented")
     }
