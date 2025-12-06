@@ -21,15 +21,15 @@ struct Aoc2025: ParsableCommand {
     var inputString = ""
 
     while let line = readLine() {
-        inputString += line + "\n"
+      inputString += line + "\n"
     }
 
     if benchmark {
       Benchmark.benchmark("Test A") {
-        print(try solution.partA(input: inputString))
+        try solution.partA(input: inputString)
       }
       Benchmark.benchmark("Test B") {
-        print(try solution.partB(input: inputString))
+        try solution.partB(input: inputString)
       }
       Benchmark.main(settings: [TimeUnit(.ms)])
       return
@@ -52,6 +52,8 @@ struct Aoc2025: ParsableCommand {
       return Solution3()
     case 4:
       return Solution4()
+    case 5:
+      return Solution5()
     default:
       fatalError("Day \(day) not implemented")
     }
