@@ -2,6 +2,7 @@
 
 import ArgumentParser
 import Benchmark
+import Foundation
 
 @main
 struct Aoc2025: ParsableCommand {
@@ -9,35 +10,56 @@ struct Aoc2025: ParsableCommand {
   public var day: Int8
 
   @Argument(help: "Part A or B")
-  public var part: String
+  public var part: String = "both"
 
   @Flag(name: .shortAndLong, help: "Run multiple times and print times")
   public var benchmark = false
 
-  public func run() throws {
+  @Flag(help: "Read input from stdin")
+  public var stdin = false
+
+  @Flag(name: .shortAndLong, help: "Use sample input")
+  public var sample = false
+
+  public mutating func run() throws {
     let solution = getSolution()
 
-    // Read all of input until EOF
+    part = part.lowercased()
+    if part != "a" && part != "b" && part != "both" {
+      throw RunnerError.invalidPart
+    }
+
     var inputString = ""
 
-    while let line = readLine() {
-      inputString += line + "\n"
+    if stdin {
+      // Read all of input until EOF
+      while let line = readLine() {
+        inputString += line + "\n"
+      }
+    } else {
+      let fileName = "\(try seekDataFolder())/\(sample ? "sample" : "input")\(day).txt"
+      inputString = try String(contentsOfFile: fileName)
     }
 
     if benchmark {
-      Benchmark.benchmark("Test A") {
-        let _ = try solution.partA(input: inputString)
+      if part == "a" || part == "both" {
+        Benchmark.benchmark("Part A") {
+          let _ = try solution.partA(input: inputString)
+        }
       }
-      Benchmark.benchmark("Test B") {
-        let _ = try solution.partB(input: inputString)
+      if part == "b" || part == "both" {
+        Benchmark.benchmark("Part B") {
+          let _ = try solution.partB(input: inputString)
+        }
       }
       Benchmark.main(settings: [TimeUnit(.ms)])
       return
     }
 
-    if part == "a" {
+    if part == "a" || part == "both" {
       print(try solution.partA(input: inputString))
-    } else {
+    }
+    if part == "b" || part == "both" {
       print(try solution.partB(input: inputString))
     }
   }
@@ -56,9 +78,31 @@ struct Aoc2025: ParsableCommand {
       return Solution5()
     case 6:
       return Solution6()
+    case 7:
+      return Solution7()
     default:
       fatalError("Day \(day) not implemented")
     }
+  }
+
+  func seekDataFolder() throws -> String {
+    let fileManager = FileManager.default
+    var currentFolder = URL(string: fileManager.currentDirectoryPath)!
+
+    while !fileManager.fileExists(atPath: "\(currentFolder)/Data") {
+      currentFolder.deleteLastPathComponent()
+
+      if currentFolder.pathComponents.count == 1 {
+        throw RunnerError.noDataFolder
+      }
+    }
+
+    return "\(currentFolder.absoluteString)/Data"
+  }
+
+  enum RunnerError: Error {
+    case invalidPart
+    case noDataFolder
   }
 }
 
