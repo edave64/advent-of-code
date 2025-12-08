@@ -61,13 +61,4 @@ struct Solution7: Solution {
 
     return String(beamTimeline.reduce(0, +))
   }
-
-  enum SolutionError: Error {
-    case invalidInput
-  }
-
-  enum Operation {
-    case add
-    case multiply
-  }
 }
