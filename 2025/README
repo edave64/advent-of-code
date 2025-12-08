@@ -1,0 +1,33 @@
+# AoC 2025 in Swift
+
+## Usage
+
+You can run specific days with:
+
+```
+swift run edave64-aoc-2025 {day} {a/b}
+```
+
+So for example, to run day 5, part A:
+
+```
+swift run edave64-aoc-2025 5 a
+```
+
+To run with sample input, use the `--sample` flag
+
+You can run benchmarks with:
+
+```
+swift run edave64-aoc-2025 {day} {a/b} --benchmark
+```
+
+Note that benchmarking always runs both parts, so the one you pass is actually ignored.
+
+You can also read in the input from stdin with the `--stdin` flag. In that case, you can ignore the
+following Setup section.
+
+## Setup
+
+Before you can run the project, you need to download the puzzle data. Create a folder called `Data`
+in the root of the project and create files called `sample{day}.txt` and `input{day}.txt` in it.
