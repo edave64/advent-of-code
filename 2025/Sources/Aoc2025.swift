@@ -80,6 +80,8 @@ struct Aoc2025: ParsableCommand {
       return Solution6()
     case 7:
       return Solution7()
+    case 8:
+      return Solution8()
     default:
       fatalError("Day \(day) not implemented")
     }
