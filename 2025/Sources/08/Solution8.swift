@@ -170,9 +170,9 @@ struct Solution8: Solution {
     let z: Int
 
     func distance(to: Point) -> Int {
-      let x = Int(pow(Double(abs(x - to.x)), 2.0))
-      let y = Int(pow(Double(abs(y - to.y)), 2.0))
-      let z = Int(pow(Double(abs(z - to.z)), 2.0))
+      let x = Int(pow(Double(x - to.x), 2))
+      let y = Int(pow(Double(y - to.y), 2))
+      let z = Int(pow(Double(z - to.z), 2))
       return x + y + z
     }
   }
