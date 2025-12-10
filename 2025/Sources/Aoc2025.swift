@@ -7,7 +7,7 @@ import Foundation
 @main
 struct Aoc2025: ParsableCommand {
   @Argument(help: "The day")
-  public var day: Int8
+  public var day: Int8 = 8
 
   @Argument(help: "Part A or B")
   public var part: String = "both"
@@ -82,6 +82,8 @@ struct Aoc2025: ParsableCommand {
       return Solution7()
     case 8:
       return Solution8()
+    case 9:
+      return Solution9()
     default:
       fatalError("Day \(day) not implemented")
     }
