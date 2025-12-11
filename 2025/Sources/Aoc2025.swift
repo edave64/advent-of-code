@@ -29,27 +29,43 @@ struct Aoc2025: ParsableCommand {
       throw RunnerError.invalidPart
     }
 
-    var inputString = ""
+    var inputStringA = ""
+    var inputStringB = ""
 
     if stdin {
       // Read all of input until EOF
       while let line = readLine() {
-        inputString += line + "\n"
+        inputStringA += line + "\n"
       }
+      inputStringB = inputStringA
     } else {
-      let fileName = "\(try seekDataFolder())/\(sample ? "sample" : "input")\(day).txt"
-      inputString = try String(contentsOfFile: fileName)
+      if sample {
+        if FileManager.default.fileExists(atPath: "\(try seekDataFolder())/sample\(day).txt") {
+          inputStringA = try String(contentsOfFile: "\(try seekDataFolder())/sample\(day).txt")
+          inputStringB = inputStringA
+        } else {
+          if part == "a" || part == "both" {
+            inputStringA = try String(contentsOfFile: "\(try seekDataFolder())/sample\(day)a.txt")
+          }
+          if part == "b" || part == "both" {
+            inputStringB = try String(contentsOfFile: "\(try seekDataFolder())/sample\(day)b.txt")
+          }
+        }
+      } else {
+        inputStringA = try String(contentsOfFile: "\(try seekDataFolder())/input\(day).txt")
+        inputStringB = inputStringA
+      }
     }
 
     if benchmark {
       if part == "a" || part == "both" {
         Benchmark.benchmark("Part A") {
-          let _ = try solution.partA(input: inputString)
+          let _ = try solution.partA(input: inputStringA)
         }
       }
       if part == "b" || part == "both" {
         Benchmark.benchmark("Part B") {
-          let _ = try solution.partB(input: inputString)
+          let _ = try solution.partB(input: inputStringB)
         }
       }
       Benchmark.main(settings: [TimeUnit(.ms)])
@@ -57,10 +73,10 @@ struct Aoc2025: ParsableCommand {
     }
 
     if part == "a" || part == "both" {
-      print(try solution.partA(input: inputString))
+      print(try solution.partA(input: inputStringA))
     }
     if part == "b" || part == "both" {
-      print(try solution.partB(input: inputString))
+      print(try solution.partB(input: inputStringB))
     }
   }
 
@@ -84,6 +100,10 @@ struct Aoc2025: ParsableCommand {
       return Solution8()
     case 9:
       return Solution9()
+    case 10:
+      return Solution10()
+    case 11:
+      return Solution11()
     default:
       fatalError("Day \(day) not implemented")
     }
