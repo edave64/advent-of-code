@@ -1,7 +1,9 @@
 /// A description
 
 import ArgumentParser
+
 import Benchmark
+
 import Foundation
 
 @main
@@ -41,18 +43,25 @@ struct Aoc2025: ParsableCommand {
     } else {
       if sample {
         if FileManager.default.fileExists(atPath: "\(try seekDataFolder())/sample\(day).txt") {
-          inputStringA = try String(contentsOfFile: "\(try seekDataFolder())/sample\(day).txt")
+          inputStringA = try String(
+            contentsOfFile: "\(try seekDataFolder())/sample\(day).txt",
+            encoding: String.Encoding.utf8)
           inputStringB = inputStringA
         } else {
           if part == "a" || part == "both" {
-            inputStringA = try String(contentsOfFile: "\(try seekDataFolder())/sample\(day)a.txt")
+            inputStringA = try String(
+              contentsOfFile: "\(try seekDataFolder())/sample\(day)a.txt",
+              encoding: String.Encoding.utf8)
           }
           if part == "b" || part == "both" {
-            inputStringB = try String(contentsOfFile: "\(try seekDataFolder())/sample\(day)b.txt")
+            inputStringB = try String(
+              contentsOfFile: "\(try seekDataFolder())/sample\(day)b.txt",
+              encoding: String.Encoding.utf8)
           }
         }
       } else {
-        inputStringA = try String(contentsOfFile: "\(try seekDataFolder())/input\(day).txt")
+        inputStringA = try String(
+          contentsOfFile: "\(try seekDataFolder())/input\(day).txt", encoding: String.Encoding.utf8)
         inputStringB = inputStringA
       }
     }
@@ -104,6 +113,8 @@ struct Aoc2025: ParsableCommand {
       return Solution10()
     case 11:
       return Solution11()
+    case 12:
+      return Solution12()
     default:
       fatalError("Day \(day) not implemented")
     }
@@ -129,7 +140,6 @@ struct Aoc2025: ParsableCommand {
     case noDataFolder
   }
 }
-
 protocol Solution {
   func partA(input: String) throws -> String
   func partB(input: String) throws -> String
