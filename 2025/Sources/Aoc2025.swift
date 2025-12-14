@@ -9,7 +9,7 @@ import Foundation
 @main
 struct Aoc2025: ParsableCommand {
   @Argument(help: "The day")
-  public var day: Int8 = 8
+  public var day: Int8
 
   @Argument(help: "Part A or B")
   public var part: String = "both"
@@ -42,26 +42,19 @@ struct Aoc2025: ParsableCommand {
       inputStringB = inputStringA
     } else {
       if sample {
-        if FileManager.default.fileExists(atPath: "\(try seekDataFolder())/sample\(day).txt") {
-          inputStringA = try String(
-            contentsOfFile: "\(try seekDataFolder())/sample\(day).txt",
-            encoding: String.Encoding.utf8)
+        inputStringA = fetchDataFile(file: "sample\(day).txt") ?? ""
+        if inputStringA != "" {
           inputStringB = inputStringA
         } else {
           if part == "a" || part == "both" {
-            inputStringA = try String(
-              contentsOfFile: "\(try seekDataFolder())/sample\(day)a.txt",
-              encoding: String.Encoding.utf8)
+            inputStringA = fetchDataFile(file: "sample\(day)a.txt")!
           }
           if part == "b" || part == "both" {
-            inputStringB = try String(
-              contentsOfFile: "\(try seekDataFolder())/sample\(day)b.txt",
-              encoding: String.Encoding.utf8)
+            inputStringB = fetchDataFile(file: "sample\(day)b.txt")!
           }
         }
       } else {
-        inputStringA = try String(
-          contentsOfFile: "\(try seekDataFolder())/input\(day).txt", encoding: String.Encoding.utf8)
+        inputStringA = fetchDataFile(file: "input\(day).txt")!
         inputStringB = inputStringA
       }
     }
@@ -86,6 +79,15 @@ struct Aoc2025: ParsableCommand {
     }
     if part == "b" || part == "both" {
       print(try solution.partB(input: inputStringB))
+    }
+  }
+
+  mutating func fetchDataFile(file: String.SubSequence) -> String? {
+    do {
+      return try String(
+        contentsOfFile: "\(try dataFolder())/\(file)", encoding: String.Encoding.utf8)
+    } catch {
+      return nil
     }
   }
 
@@ -120,7 +122,7 @@ struct Aoc2025: ParsableCommand {
     }
   }
 
-  func seekDataFolder() throws -> String {
+  lazy var dataFolder = {
     let fileManager = FileManager.default
     var currentFolder = URL(string: fileManager.currentDirectoryPath)!
 

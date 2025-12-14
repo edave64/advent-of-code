@@ -1,6 +1,9 @@
+// Factory blinkenlights https://adventofcode.com/2025/day/10
+
+import Cassowary
+
 import Foundation
 
-// Factory blinkenlights https://adventofcode.com/2025/day/10
 struct Solution10: Solution {
   static let max = Int.max - 1
 
@@ -53,15 +56,18 @@ struct Solution10: Solution {
   func partB(input: String) throws -> String {
     var sum = 0
 
+    var loader = Aoc2025()
+
+    let precalc = loader.fetchDataFile(file: "solve10.txt")!.split(separator: "\n").map({
+      $0.split(separator: " ").map({ Int($0)! })
+    })
+    var lineI = 0
+
     for line in input.split(separator: "\n") {
       var (_, buttons, targetJoltages) = try parseLine(line: line)
 
-      var forcedPresses = 0
-
-      print("Solving for line \(line)")
-
       // First, we find numbers that can only be incremented by one button
-      var onlyIdxs = Array(repeating: -1, count: targetJoltages.count)
+      /*var onlyIdxs = Array(repeating: -1, count: targetJoltages.count)
       for (i, button) in buttons.enumerated() {
         for j in button {
           if onlyIdxs[j] == -1 {
@@ -94,17 +100,122 @@ struct Solution10: Solution {
         print("In \(line), removing switch \(sIdx), \(targetJoltages)")
       }
 
+      buttons.sort { $1.count < $0.count }*/
+
       buttons.sort { $1.count < $0.count }
 
-      let ret = partBSwitchingOneShot(
-        currentJoltages: targetJoltages, buttons: buttons)
-      if ret == Solution10.max {
-        throw SolutionError.noSolution
-      }
-      print("Solved for line \(line), \(ret) presses needed")
-      sum += ret + forcedPresses
+      sum += try partBCassowary(
+        buttons: buttons, targetJoltages: targetJoltages, testing: precalc[lineI])
+      lineI += 1
     }
     return String(sum)
+  }
+
+  func partBCassowary(buttons: [[Int]], targetJoltages: [Int], testing: [Int]? = nil)
+    throws -> Int
+  {
+    let solver = Solver()
+
+    let vars = buttons.enumerated().map({ Variable("var_\($0.offset)") })
+
+    var errors: [String] = []
+
+    for v in vars {
+      try solver.add(constraint: v >= 0)
+    }
+
+    for v in (0..<vars.count - 1) {
+      try solver.add(constraint: vars[v] >= vars[v + 1], strength: Strength.strong)
+    }
+
+    for (i, targetJoltage) in targetJoltages.enumerated() {
+      if targetJoltage == 0 { continue }
+      let buttonsWithEffect = buttons.enumerated().filter({ $0.element.contains(i) }).map({
+        $0.offset
+      })
+
+      do {
+        if buttonsWithEffect.count == 0 {
+          continue
+        } else if buttonsWithEffect.count == 1 {
+          try solver.add(constraint: vars[buttonsWithEffect[0]] == Double(targetJoltage))
+        } else {
+          var exp = vars[buttonsWithEffect[0]] + vars[buttonsWithEffect[1]]
+          for btn in buttonsWithEffect.dropFirst(2) {
+            exp = exp + vars[btn]
+          }
+          try solver.add(
+            constraint: Double(targetJoltage) == exp
+          )
+        }
+      } catch is DuplicateConstraint {
+        errors.append(
+          "UnsatisfiableConstraint \(targetJoltage) = \(buttonsWithEffect.map({ vars[$0].name }))")
+      } catch is UnsatisfiableConstraint {
+        errors.append(
+          "UnsatisfiableConstraint \(targetJoltage) = \(buttonsWithEffect.map({ vars[$0].name }))")
+      }
+    }
+    solver.update()
+
+    var optimizeExp = 0.0 + vars.first!
+
+    for v in vars.dropFirst() {
+      optimizeExp = optimizeExp + v
+    }
+
+    var lastValidVars: [Int]?
+
+    if validVars() {
+      lastValidVars = vars.map({ Int(round($0.value)) })
+    } else {
+      //print("Invalid", vars.map({ $0.value }))
+    }
+
+    while true {
+      do {
+        try solver.add(constraint: optimizeExp <= vars.reduce(0, { $0 + $1.value }) - 1)
+        solver.update()
+
+        if validVars() {
+          lastValidVars = vars.map({ Int(round($0.value)) })
+        }
+      } catch {
+        break
+      }
+    }
+
+    func validVars() -> Bool {
+      let varStates = vars.map({ Int(round($0.value)) })
+      var res = Array(repeating: 0, count: targetJoltages.count)
+
+      for (btnIdx, btnPresses) in varStates.enumerated() {
+        for slot in buttons[btnIdx] {
+          res[slot] += btnPresses
+        }
+      }
+
+      return res == targetJoltages
+    }
+
+    if lastValidVars == nil {
+      errors.append("No valid solution found")
+    }
+
+    let res = lastValidVars ?? vars.map({ Int(round($0.value)) })
+    let ret = res.reduce(0, +)
+
+    if testing != nil && testing!.reduce(0, +) != ret {
+      errors.append("Testing failed: \(res), expected \(testing!)")
+
+      print("")
+      print("Failed in \(buttons) -> \(targetJoltages)")
+      for e in errors {
+        print(e)
+      }
+    }
+
+    return ret
   }
 
   func partBSwitching(
